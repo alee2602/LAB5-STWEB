@@ -1,0 +1,404 @@
+<!--Lab 5  JS ONLY-->
+<!--Mónica Salvatierra- 22249-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talkie Chat</title>
+</head>
+<body>
+    <script>
+
+    const darkTheme = {
+        headerbackgroundColor: '#20232a',
+        backgroundColor: '#282c34', 
+        textColor: '#61dafb', 
+        inputBackgroundColor: '#20232a', 
+        inputTextColor: '#61dafb', 
+        buttonBackgroundColor: '#191717', 
+        sendbuttonBackgroundColor: '#61dafb',
+        sendbuttonColor: '#20232a ',
+        buttonTextColor: '#EEEDEB', 
+        messageDivColor: '#77868D',
+        usernameDivColor: '#61dafb',
+        messageTextDivColor: '#FFFFFF'
+        };
+
+    const lightTheme = {
+        headerbackgroundColor: '#EEEDEB',
+        backgroundColor: '#FFFFFF', 
+        textColor: '#2D3250', 
+        inputBackgroundColor: '#EEEEEE', 
+        inputTextColor: '#000000', 
+        buttonBackgroundColor: '#DDDDDD', 
+        sendbuttonBackgroundColor: '#2D3250',
+        sendbuttonColor: '#FFFFFF ',
+        buttonTextColor: '#000000', 
+        messageDivColor: '#ADC4CE',
+        usernameDivColor: '#424769',
+        messageTextDivColor: '#000000'
+    };
+
+    // Aplica estilos al body 
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.height = '100vh';
+    document.body.style.display = 'flex';
+    document.body.style.flexDirection = 'column';
+
+
+    //     H E A D E R 
+    const chatHeader = document.createElement('div');
+    chatHeader.style.padding = '20px 0'; 
+    chatHeader.style.backgroundColor = '#20232a';
+    chatHeader.style.color = '#61dafb';
+    chatHeader.style.textAlign = 'center'; 
+    chatHeader.style.fontSize = '36px';
+    chatHeader.style.fontWeight = 'bold';
+
+     // Contenedor para el usuario 
+    const userBox = document.createElement('div');
+    userBox.style.padding = '10px';
+    userBox.style.display = 'flex';
+    userBox.style.alignItems = 'center';
+    userBox.style.justifyContent = 'space-between';
+    userBox.style.backgroundColor = '#20232a'; 
+
+    // Campo y etiqueta de usuario
+    const labelUser = document.createElement('label');
+    labelUser.setAttribute('for', 'user');
+    labelUser.textContent = 'USER: ';
+    labelUser.style.color = '#d8d7d6';
+        
+    const inputUser = document.createElement('input');
+    inputUser.setAttribute('id', 'user');
+    inputUser.setAttribute('value', 'alee2602');
+    inputUser.type = 'text';
+    inputUser.style.border = 'none';
+    inputUser.style.borderRadius = '40px';
+    inputUser.style.padding = '5px 10px';
+    inputUser.style.marginLeft = '10px';
+    inputUser.style.fontSize = '16px';
+    inputUser.style.backgroundColor = '#20232a';
+    inputUser.style.color = '#61dafb';
+
+    // Agrega elementos al userBox
+    userBox.appendChild(labelUser);
+    userBox.appendChild(inputUser);
+
+    const themeToggleButton = document.createElement('button');
+    themeToggleButton.textContent = 'Change Theme';
+    themeToggleButton.style.padding = '5px 10px';
+    themeToggleButton.style.marginLeft = 'auto';
+    themeToggleButton.style.cursor = 'pointer';
+    themeToggleButton.style.backgroundColor='#191717'
+    themeToggleButton.style.color='#FFFFFF'
+    themeToggleButton.style.alignSelf = 'flex-end'; 
+    userBox.appendChild(themeToggleButton);
+        
+    const title = document.createTextNode('Talkie');
+    chatHeader.appendChild(title);
+
+
+    //     C H A T
+    const chatContainer = document.createElement('div');
+    chatContainer.style.flexGrow = '1';
+    chatContainer.style.display = 'flex';
+    chatContainer.style.flexDirection = 'column';
+    chatContainer.style.backgroundColor = '#282c34';
+    chatContainer.style.height = 'calc(100vh - 50px)'; 
+
+    // Agrega elementos al DOM
+    document.body.append(userBox);
+    document.body.append(chatHeader);
+    document.body.append(chatContainer);
+
+    // Área de mensajes
+    const messageArea = document.createElement('div');
+    messageArea.style.flex = '1';
+    messageArea.style.overflowY = 'scroll';
+    messageArea.style.padding = '10px';
+    messageArea.style.display = 'flex';
+    messageArea.style.flexDirection = 'column-reverse'; //Nuevos mensajes de abajo para arriba
+
+
+    //     F O O T E R
+    const chatFooter = document.createElement('div');
+    chatFooter.style.display = 'flex';
+    chatFooter.style.flexShrink = '0';
+    chatFooter.style.marginTop = 'auto';
+    chatFooter.style.position = 'relative';
+
+    // Contenedor para el input y el contador
+    const inputAndSendContainer = document.createElement('div');
+    inputAndSendContainer.style.display = 'flex';
+    inputAndSendContainer.style.flexGrow = '1';
+    inputAndSendContainer.style.margin = '10px';
+    inputAndSendContainer.style.alignItems = 'center';
+    inputAndSendContainer.style.justifyContent = 'space-between';
+
+     // Input para enviar mensajes
+    const messageInput = document.createElement('input');
+    messageInput.placeholder = 'Type your message here...';
+    messageInput.setAttribute('maxlength', '140');
+    messageInput.style.padding = '10px';
+    messageInput.style.margin = '10px';
+    messageInput.style.flexGrow = '1';
+    messageInput.style.border = '2px solid #61dafb';
+    messageInput.style.borderRadius = '4px';
+    messageInput.style.color = '#d8d7d6';
+    messageInput.style.backgroundColor = '#20232a';
+    messageInput.style.outline = 'none';
+    messageInput.style.marginLeft = '60px'; 
+
+    // Contador de caracteres
+    const charCounter = document.createElement('span');
+    charCounter.textContent = '0/140'; 
+    charCounter.style.position = 'absolute'; 
+    charCounter.style.bottom = '12px'; 
+    charCounter.style.color = '#d8d7d6'; 
+    charCounter.style.marginRight = '10px';
+    charCounter.style.marginBottom = '15px';
+
+
+    messageInput.addEventListener('input', function() {
+        const maxLength = this.getAttribute('maxlength');
+        const currentLength = this.value.length;
+        charCounter.textContent = `${currentLength}/${maxLength}`;
+    });
+
+
+    // Botón de envío
+    const sendButton = document.createElement('button');
+    sendButton.textContent = 'Send';
+    sendButton.style.padding = '10px 20px';
+    sendButton.style.margin = '10px';
+    sendButton.style.border = 'none';
+    sendButton.style.borderRadius = '4px';
+    sendButton.style.color = '#20232a';
+    sendButton.style.backgroundColor = '#61dafb';
+    sendButton.style.cursor = 'pointer';
+
+    //Realiza submit del mensaje luego de apachar el botón de 'Enter'
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+
+    // Agrega elementos al DOM
+    chatContainer.append(chatHeader);
+    chatContainer.append(messageArea);
+    chatContainer.append(chatFooter);
+    chatFooter.appendChild(inputAndSendContainer);
+    inputAndSendContainer.appendChild(messageInput);
+    inputAndSendContainer.appendChild(charCounter);
+    inputAndSendContainer.appendChild(sendButton);
+        
+    //Cambia el tema del chat
+    let isDarkTheme = localStorage.getItem('isDarkTheme') === null ? true : localStorage.getItem('isDarkTheme') === 'true';
+
+    function toggleTheme() {
+        const theme = isDarkTheme ? lightTheme : darkTheme; // Determina el tema a aplicar
+        //Body
+        document.body.style.backgroundColor = theme.backgroundColor;
+    
+        //Userbox y features
+        userBox.style.backgroundColor = theme.headerbackgroundColor;
+        labelUser.style.color = theme.textColor;
+        inputUser.style.backgroundColor = theme.inputBackgroundColor;
+        inputUser.style.color = theme.inputTextColor;
+
+        //Header
+        chatHeader.style.color = theme.textColor;
+        chatHeader.style.backgroundColor = theme.headerbackgroundColor;
+
+        //Chat Container
+        chatContainer.style.backgroundColor = theme.backgroundColor;
+
+        //Input mensajes
+        messageInput.style.backgroundColor = theme.inputBackgroundColor;
+        messageInput.style.color = theme.inputTextColor;
+
+        //Send button
+        sendButton.style.backgroundColor = theme.sendbuttonBackgroundColor;
+        sendButton.style.color = theme.sendbuttonColor;
+
+        //Theme Toggle button
+        themeToggleButton.style.backgroundColor = theme.buttonBackgroundColor;
+        themeToggleButton.style.color = theme.buttonTextColor;
+
+        //Counter
+        charCounter.style.color= theme.messageTextDivColor
+        
+        isDarkTheme = !isDarkTheme; 
+        localStorage.setItem('isDarkTheme', isDarkTheme);
+        getMessages();
+    }
+
+    themeToggleButton.onclick = toggleTheme;
+
+    function applyMessageStyles(messageDiv, usernameDiv, messageTextDiv, timeStampDiv, theme) {
+        messageDiv.style.backgroundColor = theme.messageDivColor; 
+        usernameDiv.style.color = theme.usernameDivColor; 
+        messageTextDiv.style.color = theme.messageTextDivColor; 
+        timeStampDiv.style.color= theme.usernameDivColor;
+    }
+
+    //Obtiene los mensajes de la base de datos
+    async function getMessages() {
+        try {
+            const response = await fetch('https://chat.arpanetos.lol/messages');
+            const data = await response.json();
+            console.log('Mensajes:', data);
+
+            // Guarda la posición actual del scroll
+            const currentScrollPosition = messageArea.scrollTop;
+            const atBottom = currentScrollPosition === messageArea.scrollHeight - messageArea.clientHeight;
+
+            messageArea.innerHTML = ''; 
+
+            // Itera sobre los datos y crea los elementos del mensaje
+            data.forEach(msg => {
+                const { username, message, created_at } = msg;
+
+                const messageDiv = document.createElement('div');
+                messageDiv.style.maxWidth = '400px'; 
+                messageDiv.style.wordWrap = 'break-word'; 
+                messageDiv.style.marginBottom = '15px';
+                messageDiv.style.marginLeft = '35px';
+                messageDiv.style.padding = '10px';
+                messageDiv.style.borderRadius = '10px';
+
+                const usernameDiv = document.createElement('div');
+                usernameDiv.textContent = username;
+                usernameDiv.style.fontWeight = 'bold';
+
+                const messageTextDiv = document.createElement('div');
+                messageTextDiv.textContent = message;
+                messageTextDiv.style.color = '#EEEDEB'; 
+
+                const urlImage = /(https?:\/\/.*\.(?:png|jpg|gif|jpeg))/i;
+                const found = msg.message.match(urlImage);
+
+                if (found && found[0]) {
+                    // Crea una preview de la imagen
+                    const image = document.createElement('img');
+                    image.src = found[0];
+                    image.style.maxWidth = '100%'; 
+                    image.style.borderRadius = '4px';
+                    image.alt = 'Image preview'; 
+
+                    messageTextDiv.innerHTML = ''; 
+                    messageTextDiv.appendChild(image);
+                }
+
+                const timeStampDiv = document.createElement('div');
+                timeStampDiv.style.fontSize = '12px';
+                timeStampDiv.style.color = '#EEEDEB'; 
+                timeStampDiv.style.marginLeft = '300px';
+                timeStampDiv.textContent = new Date(created_at).toLocaleString();
+
+                applyMessageStyles(messageDiv, usernameDiv, messageTextDiv, timeStampDiv, isDarkTheme ? darkTheme : lightTheme);
+
+                // Añade elementos al contenedor del mensaje
+                messageDiv.appendChild(usernameDiv);
+                messageDiv.appendChild(messageTextDiv);
+                messageDiv.appendChild(timeStampDiv);
+
+                // Añade el contenedor del mensaje al área de mensajes
+                messageArea.appendChild(messageDiv);
+                });
+
+            // Si el usuario estaba al final del área de mensajes, mantiene esa posición
+            if (atBottom) {
+                messageArea.scrollTop = messageArea.scrollHeight;
+            } else {
+                // De lo contrario, restablece la posición del scroll para que el usuario continúe donde estaba
+                messageArea.scrollTop = currentScrollPosition;
+            }
+        } catch (error) {
+            console.error('Error al obtener mensajes:', error);
+        }
+    }
+        // Configurar la actualización automática
+        setInterval(getMessages, 6000);
+        
+        getMessages();
+
+    //Manda los mensajes a la base de datos
+    async function sendMessage(username, message) {
+        try {
+            const response = await fetch('https://chat.arpanetos.lol/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, message }),
+            });
+            const data = await response.json();
+            console.log('Mensaje enviado:', data);
+
+            getMessages();
+        } catch (error) {
+            console.error('Error al enviar mensaje:', error);
+        }
+    }
+
+    sendButton.onclick = () => {
+        const username = inputUser.value.trim();
+        const message = messageInput.value.trim();
+
+        // Validación del mensaje
+        if (message.length === 0) {
+            alert("The message cannot be empty.");
+            return; 
+        }
+
+        if (username.length === 0) {
+            alert("Username cannot be empty.");
+            return; 
+        }
+
+        // Validación del nombre de usuario
+        if (username && message) {
+            sendMessage(username, message);
+            messageInput.value = ''; // Limpia el campo de entrada después de enviar
+            charCounter.textContent = '0/140';
+        }
+    };
+
+    function responsiveness() {
+    const windowWidth = window.innerWidth;
+
+    if (windowWidth <= 767) {
+        // Dispositivos móviles
+        messageInput.style.width = 'calc(100% - 20px)';
+        messageInput.style.marginLeft = '10px';
+        sendButton.style.width = '100%';
+        charCounter.style.display = 'block';
+        charCounter.style.position = 'relative';
+        charCounter.style.marginTop = '5px';
+        charCounter.style.marginRight = '0';
+        inputAndSendContainer.style.flexDirection = 'column';
+    } else {
+        // Pantallas más grandes
+        messageInput.style.width = 'auto';
+        messageInput.style.marginLeft = '60px';
+        sendButton.style.width = 'auto';
+        charCounter.style.display = 'inline';
+        charCounter.style.position = 'absolute';
+        charCounter.style.marginTop = '0';
+        charCounter.style.marginRight = '10px';
+        inputAndSendContainer.style.flexDirection = 'row';
+        }
+    }
+    responsiveness();
+
+    window.addEventListener('resize', responsiveness);
+
+    </script>
+</body>
+</html>
