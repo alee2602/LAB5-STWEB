@@ -23,7 +23,8 @@
         buttonTextColor: '#EEEDEB', 
         messageDivColor: '#77868D',
         usernameDivColor: '#61dafb',
-        messageTextDivColor: '#FFFFFF'
+        messageTextDivColor: '#FFFFFF',
+        inputUserBorder: '#61dafb'
         };
 
     const lightTheme = {
@@ -38,7 +39,8 @@
         buttonTextColor: '#000000', 
         messageDivColor: '#ADC4CE',
         usernameDivColor: '#424769',
-        messageTextDivColor: '#000000'
+        messageTextDivColor: '#000000',
+        inputUserBorder: '#2D3250'
     };
 
     // Aplica estilos al body 
@@ -76,7 +78,7 @@
     inputUser.setAttribute('id', 'user');
     inputUser.setAttribute('value', '');
     inputUser.type = 'text';
-    inputUser.style.border = 'none';
+    inputUser.style.border = '2px solid #61dafb';
     inputUser.style.borderRadius = '40px';
     inputUser.style.padding = '5px 10px';
     inputUser.style.marginLeft = '10px';
@@ -210,6 +212,7 @@
         labelUser.style.color = theme.textColor;
         inputUser.style.backgroundColor = theme.inputBackgroundColor;
         inputUser.style.color = theme.inputTextColor;
+        inputUser.style.border = `2px solid ${theme.inputUserBorder}`;
 
         //Header
         chatHeader.style.color = theme.textColor;
